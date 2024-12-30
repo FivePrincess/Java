@@ -3,33 +3,16 @@ package main.java.com.example.model;
 import java.util.Date;
 
 public class WorkExperience {
-    private int workExperienceId;
-    private String workplaceName;
-    private Date startDate;
-    private Date endDate;
-    private String workContent;
-    private Resume resume;  // Resume 필드 추가
+    private int workExperienceId;   // WorkExperience ID
+    private String workplaceName;  // 직장 이름
+    private Date startDate;         // 시작 날짜
+    private Date endDate;           // 종료 날짜
+    private String workContent;     // 업무 내용
 
-    // 기존 생성자
-    public WorkExperience(int workExperienceId, String workplaceName, Date startDate, Date endDate, String workContent) {
-        this.workExperienceId = workExperienceId;
-        this.workplaceName = workplaceName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.workContent = workContent;
-    }
+    // Resume와의 관계
+    private Resume resume;
 
-    // 새로운 생성자 (Resume 포함)
-    public WorkExperience(int workExperienceId, String workplaceName, Date startDate, Date endDate, String workContent, Resume resume) {
-        this.workExperienceId = workExperienceId;
-        this.workplaceName = workplaceName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.workContent = workContent;
-        this.resume = resume;
-    }
-
-    // Getter 및 Setter 메서드
+    // Getters and Setters
     public int getWorkExperienceId() {
         return workExperienceId;
     }
@@ -78,8 +61,14 @@ public class WorkExperience {
         this.resume = resume;
     }
 
-    @Override
-    public String toString() {
-        return workplaceName + " (" + startDate + " ~ " + endDate + ") - " + workContent;
+    // Display WorkExperience details
+    public void displayWorkExperience() {
+        System.out.println("WorkExperience Details:");
+        System.out.println("WorkExperience ID: " + workExperienceId);
+        System.out.println("Workplace Name: " + workplaceName);
+        System.out.println("Start Date: " + startDate);
+        System.out.println("End Date: " + endDate);
+        System.out.println("Work Content: " + workContent);
+        System.out.println("Resume Title: " + (resume != null ? resume.getTitle() : "No Resume"));
     }
 }

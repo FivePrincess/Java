@@ -1,37 +1,34 @@
-
 package main.java.com.example.model;
-import main.java.com.example.model.WorkExperience;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class Resume {
-    private String employeeId;
-    private String title;
-    private String address;
-    private String phoneNumber;
-    private String instagram;
-    private Date updatedAt;
-    private ArrayList<WorkExperience> workExperience;
+    private int resumeId;             // 이력서 ID
+    private String title;             // 이력서 제목
+    private Date updatedAt;           // 업데이트 날짜
+    private String address;           // 주소
+    private String phoneNumber;       // 전화번호
+    private String instagram;         // 인스타그램 계정
+    private String mbti;              // MBTI
+    private Employee employee;        // Employee 객체와의 관계
 
-    public Resume(String employeeId, String title, String address, String phoneNumber, String instagram) {
-        this.employeeId = employeeId;
-        this.title = title;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.instagram = instagram;
-        this.updatedAt = new Date();
-        this.workExperience = new ArrayList<>();
+    // WorkExperience와의 1:N 관계
+    private List<WorkExperience> workExperiences = new ArrayList<>();
+
+    // Constructor
+    public Resume() {
+        this.updatedAt = new Date();  // 생성 시 업데이트 날짜 초기화
     }
 
-    // Getter 및 Setter 메서드
-    public String getEmployeeId() {
-        return employeeId;
+    // Getters and Setters
+    public int getResumeId() {
+        return resumeId;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setResumeId(int resumeId) {
+        this.resumeId = resumeId;
     }
 
     public String getTitle() {
@@ -40,6 +37,14 @@ public class Resume {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getAddress() {
@@ -66,44 +71,44 @@ public class Resume {
         this.instagram = instagram;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public String getMbti() {
+        return mbti;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setMbti(String mbti) {
+        this.mbti = mbti;
     }
 
-    public ArrayList<WorkExperience> getWorkExperience() {
-        return workExperience;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void addWorkExperience(WorkExperience experience) {
-        this.workExperience.add(experience);
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
-    @Override
-    public String toString() {
-        return title + " - " + phoneNumber + " - " + instagram;
+    public List<WorkExperience> getWorkExperiences() {
+        return workExperiences;
     }
 
-    public String toDetailString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        StringBuilder details = new StringBuilder();
-        details.append("Employee ID: ").append(employeeId).append("\n");
-        details.append("Title: ").append(title).append("\n");
-        details.append("Updated At: ").append(sdf.format(updatedAt)).append("\n");
-        details.append("Address: ").append(address).append("\n");
-        details.append("Phone Number: ").append(phoneNumber).append("\n");
-        details.append("Instagram: ").append(instagram).append("\n\n");
+    public void addWorkExperience(WorkExperience workExperience) {
+        workExperiences.add(workExperience);
+        workExperience.setResume(this); // WorkExperience와의 관계 설정
+    }
 
-        details.append("Work Experience:\n");
-        for (WorkExperience exp : workExperience) {
-            details.append("- ").append(exp.getWorkplaceName()).append(" (")
-                    .append(sdf.format(exp.getStartDate())).append(" ~ ")
-                    .append(sdf.format(exp.getEndDate())).append(")\n");
-            details.append("  Content: ").append(exp.getWorkContent()).append("\n\n");
+    // Display Resume Details
+    public void displayResumeDetails() {
+        System.out.println("Resume ID: " + resumeId);
+        System.out.println("Title: " + title);
+        System.out.println("Updated At: " + updatedAt);
+        System.out.println("Address: " + address);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Instagram: " + instagram);
+        System.out.println("MBTI: " + mbti);
+        System.out.println("Employee: " + (employee != null ? employee.getEmployeeName() : "No Employee"));
+        System.out.println("Work Experiences:");
+        for (WorkExperience workExperience : workExperiences) {
+            System.out.println("- Workplace: " + workExperience.getWorkplaceName());
         }
-        return details.toString();
     }
 }
