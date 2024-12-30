@@ -4,11 +4,12 @@ import main.java.com.example.model.Resume;
 import main.java.com.example.model.WorkExperience;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class ResumeApp extends JFrame {
-    private Resume.ResumeService resumeService = new Resume.ResumeService();
+    private ArrayList<Resume> resumes = new ArrayList<>();
     private DefaultListModel<String> listModel = new DefaultListModel<>();
     private JList<String> resumeList = new JList<>(listModel);
 
@@ -31,11 +32,13 @@ public class ResumeApp extends JFrame {
         add(new JScrollPane(resumeList), BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        addButton.addActionListener(e -> showFormDialog(new Resume("", "", "", "", ""), false));
+        refreshResumeList();
+
+        addButton.addActionListener(e -> showFormDialog(new Resume("0", "", "", "", ""), false));
         editButton.addActionListener(e -> {
             int selectedIndex = resumeList.getSelectedIndex();
             if (selectedIndex != -1) {
-                Resume resume = resumeService.getResumes().get(selectedIndex);
+                Resume resume = resumes.get(selectedIndex);
                 showFormDialog(resume, true);
             } else {
                 JOptionPane.showMessageDialog(this, "수정할 이력서를 선택하세요.", "오류", JOptionPane.ERROR_MESSAGE);
@@ -45,7 +48,7 @@ public class ResumeApp extends JFrame {
         detailButton.addActionListener(e -> {
             int selectedIndex = resumeList.getSelectedIndex();
             if (selectedIndex != -1) {
-                Resume resume = resumeService.getResumes().get(selectedIndex);
+                Resume resume = resumes.get(selectedIndex);
                 JOptionPane.showMessageDialog(this, resume.toDetailString(), "이력서 상세보기", JOptionPane.INFORMATION_MESSAGE);
             }
         });
@@ -53,14 +56,25 @@ public class ResumeApp extends JFrame {
         deleteButton.addActionListener(e -> {
             int selectedIndex = resumeList.getSelectedIndex();
             if (selectedIndex != -1) {
-                resumeService.getResumes().remove(selectedIndex);
+                resumes.remove(selectedIndex);
                 listModel.remove(selectedIndex);
+                refreshResumeList();
                 JOptionPane.showMessageDialog(this, "이력서가 성공적으로 삭제되었습니다.");
             }
         });
 
-        // 창을 보이게 설정
         setVisible(true);
+    }
+
+    private void refreshResumeList() {
+        listModel.clear();
+        if (resumes.isEmpty()) {
+            listModel.addElement("아직 등록된 이력서가 없습니다.");
+        } else {
+            for (Resume resume : resumes) {
+                listModel.addElement(resume.getTitle());
+            }
+        }
     }
 
     private void showFormDialog(Resume resume, boolean isEdit) {
@@ -68,10 +82,10 @@ public class ResumeApp extends JFrame {
         dialog.setSize(400, 600);
         dialog.setLayout(new GridLayout(12, 2));
 
-        JTextField titleField = new JTextField(resume.title);
-        JTextField addressField = new JTextField(resume.address);
-        JTextField phoneField = new JTextField(resume.phoneNumber);
-        JTextField instagramField = new JTextField(resume.instagram);
+        JTextField titleField = new JTextField(resume.getTitle());
+        JTextField addressField = new JTextField(resume.getAddress());
+        JTextField phoneField = new JTextField(resume.getPhoneNumber());
+        JTextField instagramField = new JTextField(resume.getInstagram());
         JTextField workPlaceField = new JTextField();
         JTextField workContentField = new JTextField();
         JTextField startDateField = new JTextField("yyyy-MM-dd");
@@ -86,6 +100,14 @@ public class ResumeApp extends JFrame {
         dialog.add(new JLabel("인스타그램:"));
         dialog.add(instagramField);
 
+        if (!resume.getWorkExperience().isEmpty()) {
+            WorkExperience lastExp = resume.getWorkExperience().get(resume.getWorkExperience().size() - 1);
+            workPlaceField.setText(lastExp.getWorkplaceName());
+            workContentField.setText(lastExp.getWorkContent());
+            startDateField.setText(new SimpleDateFormat("yyyy-MM-dd").format(lastExp.getStartDate()));
+            endDateField.setText(new SimpleDateFormat("yyyy-MM-dd").format(lastExp.getEndDate()));
+        }
+
         dialog.add(new JLabel("직장명:"));
         dialog.add(workPlaceField);
         dialog.add(new JLabel("업무 내용:"));
@@ -99,27 +121,26 @@ public class ResumeApp extends JFrame {
         dialog.add(saveButton);
 
         saveButton.addActionListener(e -> {
-            resume.title = titleField.getText();
-            resume.address = addressField.getText();
-            resume.phoneNumber = phoneField.getText();
-            resume.instagram = instagramField.getText();
+            resume.setTitle(titleField.getText());
+            resume.setAddress(addressField.getText());
+            resume.setPhoneNumber(phoneField.getText());
+            resume.setInstagram(instagramField.getText());
 
             try {
                 Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateField.getText());
                 Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateField.getText());
-                int newId = resume.workExperience.size() + 1;  // 자동 증가 ID
-                resume.workExperience.add(new WorkExperience(newId, workPlaceField.getText(), startDate, endDate, workContentField.getText()));
+                int newId = resume.getWorkExperience().size() + 1;
+                WorkExperience workExperience = new WorkExperience(newId, workPlaceField.getText(), startDate, endDate, workContentField.getText());
+                resume.addWorkExperience(workExperience);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "유효하지 않은 날짜 형식입니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (!isEdit) {
-                resumeService.addResume(resume);
-                listModel.addElement(resume.toString());
-            } else {
-                listModel.setElementAt(resume.toString(), resumeList.getSelectedIndex());
+                resumes.add(resume);
             }
+            refreshResumeList();
             dialog.dispose();
         });
 
@@ -127,6 +148,6 @@ public class ResumeApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ResumeApp().setVisible(true));
+        SwingUtilities.invokeLater(ResumeApp::new);
     }
 }

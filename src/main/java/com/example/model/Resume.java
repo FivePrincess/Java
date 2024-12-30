@@ -6,13 +6,13 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class Resume {
-    String employeeId;
-    public String title;
-    public String address;
-    public String phoneNumber;
-    public String instagram;
-    Date updatedAt;
-    public ArrayList<WorkExperience> workExperience;
+    private String employeeId;
+    private String title;
+    private String address;
+    private String phoneNumber;
+    private String instagram;
+    private Date updatedAt;
+    private ArrayList<WorkExperience> workExperience;
 
     public Resume(String employeeId, String title, String address, String phoneNumber, String instagram) {
         this.employeeId = employeeId;
@@ -22,6 +22,63 @@ public class Resume {
         this.instagram = instagram;
         this.updatedAt = new Date();
         this.workExperience = new ArrayList<>();
+    }
+
+    // Getter 및 Setter 메서드
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public ArrayList<WorkExperience> getWorkExperience() {
+        return workExperience;
+    }
+
+    public void addWorkExperience(WorkExperience experience) {
+        this.workExperience.add(experience);
     }
 
     @Override
@@ -41,28 +98,11 @@ public class Resume {
 
         details.append("Work Experience:\n");
         for (WorkExperience exp : workExperience) {
-            details.append("- ").append(exp.workplaceName).append(" (")
-                    .append(sdf.format(exp.startDate)).append(" ~ ")
-                    .append(sdf.format(exp.endDate)).append(")\n");
-            details.append("  Content: ").append(exp.workContent).append("\n\n");
+            details.append("- ").append(exp.getWorkplaceName()).append(" (")
+                    .append(sdf.format(exp.getStartDate())).append(" ~ ")
+                    .append(sdf.format(exp.getEndDate())).append(")\n");
+            details.append("  Content: ").append(exp.getWorkContent()).append("\n\n");
         }
         return details.toString();
-    }
-
-    // ResumeService (내부 클래스)
-    public static class ResumeService {
-        private ArrayList<Resume> resumes = new ArrayList<>();
-
-        public void addResume(Resume resume) {
-            resumes.add(resume);
-        }
-
-        public void deleteResume(int index) {
-            resumes.remove(index);
-        }
-
-        public ArrayList<Resume> getResumes() {
-            return resumes;
-        }
     }
 }
