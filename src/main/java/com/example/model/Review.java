@@ -1,8 +1,8 @@
 package main.java.com.example.model;
-
 import java.util.Date;
 
 public abstract class Review {
+  
     private int reviewId;
     private float rating;
     private String content;
@@ -43,4 +43,5 @@ public abstract class Review {
 
     // Abstract method to be implemented by subclasses
     public abstract void displayReviewDetails();
+
 }

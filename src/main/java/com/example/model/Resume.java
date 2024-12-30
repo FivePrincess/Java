@@ -1,94 +1,69 @@
-package main.java.com.example.model;
 
+package main.java.com.example.model;
+import main.java.com.example.model.WorkExperience;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Resume {
-    private int resumeId;
-    private String title;
-    private Date updatedAt;
-    private String address;
-    private String phoneNumber;
-    private String instagram;
-    private String mbti;
+    String employeeId;
+    public String title;
+    public String address;
+    public String phoneNumber;
+    public String instagram;
+    Date updatedAt;
+    public ArrayList<WorkExperience> workExperience;
 
-    // Employee와의 관계
-    private Employee employee;
-
-    // Getters and Setters
-    public int getResumeId() {
-        return resumeId;
-    }
-
-    public void setResumeId(int resumeId) {
-        this.resumeId = resumeId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
+    public Resume(String employeeId, String title, String address, String phoneNumber, String instagram) {
+        this.employeeId = employeeId;
         this.title = title;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getInstagram() {
-        return instagram;
-    }
-
-    public void setInstagram(String instagram) {
         this.instagram = instagram;
+        this.updatedAt = new Date();
+        this.workExperience = new ArrayList<>();
     }
 
-    public String getMbti() {
-        return mbti;
+    @Override
+    public String toString() {
+        return title + " - " + phoneNumber + " - " + instagram;
     }
 
-    public void setMbti(String mbti) {
-        this.mbti = mbti;
+    public String toDetailString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder details = new StringBuilder();
+        details.append("Employee ID: ").append(employeeId).append("\n");
+        details.append("Title: ").append(title).append("\n");
+        details.append("Updated At: ").append(sdf.format(updatedAt)).append("\n");
+        details.append("Address: ").append(address).append("\n");
+        details.append("Phone Number: ").append(phoneNumber).append("\n");
+        details.append("Instagram: ").append(instagram).append("\n\n");
+
+        details.append("Work Experience:\n");
+        for (WorkExperience exp : workExperience) {
+            details.append("- ").append(exp.workplaceName).append(" (")
+                    .append(sdf.format(exp.startDate)).append(" ~ ")
+                    .append(sdf.format(exp.endDate)).append(")\n");
+            details.append("  Content: ").append(exp.workContent).append("\n\n");
+        }
+        return details.toString();
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
+    // ResumeService (내부 클래스)
+//     public static class ResumeService {
+//         private ArrayList<Resume> resumes = new ArrayList<>();
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
+//         public void addResume(Resume resume) {
+//             resumes.add(resume);
+//         }
 
-    // Display Resume Details
-    public void displayResumeDetails() {
-        System.out.println("Resume Details:");
-        System.out.println("Resume ID: " + resumeId);
-        System.out.println("Title: " + title);
-        System.out.println("Updated At: " + updatedAt);
-        System.out.println("Address: " + address);
-        System.out.println("Phone Number: " + phoneNumber);
-        System.out.println("Instagram: " + instagram);
-        System.out.println("MBTI: " + mbti);
-        System.out.println("Employee: " + (employee != null ? employee.getEmployeeName() : "No Employee"));
-    }
+//         public void deleteResume(int index) {
+//             resumes.remove(index);
+//         }
+
+//         public ArrayList<Resume> getResumes() {
+//             return resumes;
+//         }
+//     }
 }
