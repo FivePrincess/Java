@@ -1,4 +1,5 @@
-package main.java.com.example.model;// Resume.java
+
+package main.java.com.example.model;
 import main.java.com.example.model.WorkExperience;
 
 import java.util.ArrayList;
@@ -50,19 +51,19 @@ public class Resume {
     }
 
     // ResumeService (내부 클래스)
-    public static class ResumeService {
-        private ArrayList<Resume> resumes = new ArrayList<>();
+//     public static class ResumeService {
+//         private ArrayList<Resume> resumes = new ArrayList<>();
 
-        public void addResume(Resume resume) {
-            resumes.add(resume);
-        }
+//         public void addResume(Resume resume) {
+//             resumes.add(resume);
+//         }
 
-        public void deleteResume(int index) {
-            resumes.remove(index);
-        }
+//         public void deleteResume(int index) {
+//             resumes.remove(index);
+//         }
 
-        public ArrayList<Resume> getResumes() {
-            return resumes;
-        }
-    }
+//         public ArrayList<Resume> getResumes() {
+//             return resumes;
+//         }
+//     }
 }
