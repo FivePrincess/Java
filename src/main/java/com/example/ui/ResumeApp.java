@@ -49,7 +49,7 @@ public class ResumeApp extends JFrame {
             int selectedIndex = resumeList.getSelectedIndex();
             if (selectedIndex != -1) {
                 Resume resume = resumes.get(selectedIndex);
-                JOptionPane.showMessageDialog(this, resume.toDetailString(), "이력서 상세보기", JOptionPane.INFORMATION_MESSAGE);
+                showDetailDialog(resume);
             }
         });
 
@@ -68,28 +68,79 @@ public class ResumeApp extends JFrame {
 
     private void refreshResumeList() {
         listModel.clear();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (resumes.isEmpty()) {
             listModel.addElement("아직 등록된 이력서가 없습니다.");
         } else {
             for (Resume resume : resumes) {
-                listModel.addElement(resume.getTitle());
+                String displayText = resume.getTitle() + " - " + sdf.format(resume.getUpdatedAt());
+                listModel.addElement(displayText);
             }
         }
     }
+
+    private void showDetailDialog(Resume resume) {
+        JDialog detailDialog = new JDialog(this, "이력서 상세보기", true);
+        detailDialog.setSize(400, 400);
+        detailDialog.setLayout(new BorderLayout());
+
+        // 상세 정보 출력
+        JTextArea detailArea = new JTextArea(resume.toDetailString());
+        detailArea.setEditable(false);
+        detailArea.setMargin(new Insets(10, 10, 10, 10));
+
+        JScrollPane scrollPane = new JScrollPane(detailArea);
+        detailDialog.add(scrollPane, BorderLayout.CENTER);
+
+        // 닫기 버튼
+        JButton closeButton = new JButton("닫기");
+        closeButton.addActionListener(e -> detailDialog.dispose());
+        detailDialog.add(closeButton, BorderLayout.SOUTH);
+
+        detailDialog.setLocationRelativeTo(this);
+        detailDialog.setVisible(true);
+    }
+
 
     private void showFormDialog(Resume resume, boolean isEdit) {
         JDialog dialog = new JDialog(this, isEdit ? "이력서 수정" : "이력서 추가", true);
         dialog.setSize(400, 600);
         dialog.setLayout(new GridLayout(12, 2));
 
-        JTextField titleField = new JTextField(resume.getTitle());
-        JTextField addressField = new JTextField(resume.getAddress());
-        JTextField phoneField = new JTextField(resume.getPhoneNumber());
-        JTextField instagramField = new JTextField(resume.getInstagram());
+        JTextField titleField = new JTextField(isEdit ? resume.getTitle() : "");
+        JTextField addressField = new JTextField(isEdit ? resume.getAddress() : "");
+        JTextField phoneField = new JTextField(isEdit ? resume.getPhoneNumber() : "");
+        JTextField instagramField = new JTextField(isEdit ? resume.getInstagram() : "");
         JTextField workPlaceField = new JTextField();
         JTextField workContentField = new JTextField();
         JTextField startDateField = new JTextField("yyyy-MM-dd");
         JTextField endDateField = new JTextField("yyyy-MM-dd");
+
+        // 기존 값 불러오기
+        if (isEdit && !resume.getWorkExperience().isEmpty()) {
+            WorkExperience lastExp = resume.getWorkExperience().get(resume.getWorkExperience().size() - 1);
+            workPlaceField.setText(lastExp.getWorkplaceName());
+            workContentField.setText(lastExp.getWorkContent());
+            startDateField.setText(new SimpleDateFormat("yyyy-MM-dd").format(lastExp.getStartDate()));
+            endDateField.setText(new SimpleDateFormat("yyyy-MM-dd").format(lastExp.getEndDate()));
+        }
+
+        // 포커스 시 기본 텍스트 제거
+        startDateField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (startDateField.getText().equals("yyyy-MM-dd")) {
+                    startDateField.setText("");
+                }
+            }
+        });
+
+        endDateField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (endDateField.getText().equals("yyyy-MM-dd")) {
+                    endDateField.setText("");
+                }
+            }
+        });
 
         dialog.add(new JLabel("제목:"));
         dialog.add(titleField);
@@ -99,15 +150,6 @@ public class ResumeApp extends JFrame {
         dialog.add(phoneField);
         dialog.add(new JLabel("인스타그램:"));
         dialog.add(instagramField);
-
-        if (!resume.getWorkExperience().isEmpty()) {
-            WorkExperience lastExp = resume.getWorkExperience().get(resume.getWorkExperience().size() - 1);
-            workPlaceField.setText(lastExp.getWorkplaceName());
-            workContentField.setText(lastExp.getWorkContent());
-            startDateField.setText(new SimpleDateFormat("yyyy-MM-dd").format(lastExp.getStartDate()));
-            endDateField.setText(new SimpleDateFormat("yyyy-MM-dd").format(lastExp.getEndDate()));
-        }
-
         dialog.add(new JLabel("직장명:"));
         dialog.add(workPlaceField);
         dialog.add(new JLabel("업무 내용:"));
@@ -125,12 +167,19 @@ public class ResumeApp extends JFrame {
             resume.setAddress(addressField.getText());
             resume.setPhoneNumber(phoneField.getText());
             resume.setInstagram(instagramField.getText());
+            resume.setUpdatedAt(new Date());
 
             try {
+                if (startDateField.getText().isEmpty() || endDateField.getText().isEmpty() ||
+                        startDateField.getText().equals("yyyy-MM-dd") || endDateField.getText().equals("yyyy-MM-dd")) {
+                    JOptionPane.showMessageDialog(dialog, "시작 날짜와 종료 날짜를 모두 입력하세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateField.getText());
                 Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateField.getText());
-                int newId = resume.getWorkExperience().size() + 1;
-                WorkExperience workExperience = new WorkExperience(newId, workPlaceField.getText(), startDate, endDate, workContentField.getText());
+                WorkExperience workExperience = new WorkExperience(resume.getWorkExperience().size() + 1,
+                        workPlaceField.getText(), startDate, endDate, workContentField.getText());
                 resume.addWorkExperience(workExperience);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "유효하지 않은 날짜 형식입니다.", "오류", JOptionPane.ERROR_MESSAGE);
@@ -144,10 +193,7 @@ public class ResumeApp extends JFrame {
             dialog.dispose();
         });
 
+        dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ResumeApp::new);
     }
 }
