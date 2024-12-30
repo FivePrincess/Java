@@ -67,7 +67,6 @@ public class PaymentApp {
                         int guesthouses = (int) guesthouseSpinner.getValue();
                         String paymentMethod = (String) paymentMethodCombo.getSelectedItem();
 
-                        // 테이블에 데이터 추가
                         tableModel.addRow(new Object[]{name, guesthouses, paymentMethod});
 
                         // 다이얼로그 닫기
