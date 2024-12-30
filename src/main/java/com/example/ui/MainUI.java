@@ -36,7 +36,7 @@ public class MainUI {
     }
 
     private void openResume() {
-        JOptionPane.showMessageDialog(frame, "이력서 조회 화면 열림 (구현 예정)");
+        new ResumeApp();
     }
 
     private void openReview() {

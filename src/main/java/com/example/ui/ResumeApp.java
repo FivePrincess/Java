@@ -58,6 +58,9 @@ public class ResumeApp extends JFrame {
                 JOptionPane.showMessageDialog(this, "이력서가 성공적으로 삭제되었습니다.");
             }
         });
+
+        // 창을 보이게 설정
+        setVisible(true);
     }
 
     private void showFormDialog(Resume resume, boolean isEdit) {
