@@ -1,42 +1,61 @@
 package main.java.com.example.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Resume {
-    private int resumeId;             // 이력서 ID
-    private String title;             // 이력서 제목
-    private Date updatedAt;           // 업데이트 날짜
-    private String address;           // 주소
-    private String phoneNumber;       // 전화번호
-    private String instagram;         // 인스타그램 계정
-    private String mbti;              // MBTI
-    private Employee employee;        // Employee 객체와의 관계
+    private String resumeId;
+    private String title;
+    private String address;
+    private String phoneNumber;
+    private String instagram;
+    private ArrayList<WorkExperience> workExperience;
+    private Date updatedAt;
+    private Employee employee;  // Employee와의 관계 추가
 
-    // WorkExperience와의 1:N 관계
-    private List<WorkExperience> workExperiences = new ArrayList<>();
-
-    // Constructor
-    public Resume() {
-        this.updatedAt = new Date();  // 생성 시 업데이트 날짜 초기화
-    }
-
-    // Getters and Setters
-    public int getResumeId() {
-        return resumeId;
-    }
-
-    public void setResumeId(int resumeId) {
+    public Resume(String resumeId, String title, String address, String phoneNumber, String instagram) {
         this.resumeId = resumeId;
+        this.title = title;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.instagram = instagram;
+        this.workExperience = new ArrayList<>();
+        this.updatedAt = new Date();
+    }
+
+    // Employee 설정 메서드 추가
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    // Resume ID 반환 메서드 추가
+    public String getResumeId() {
+        return resumeId;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public ArrayList<WorkExperience> getWorkExperience() {
+        return workExperience;
     }
 
     public Date getUpdatedAt() {
@@ -47,68 +66,54 @@ public class Resume {
         this.updatedAt = updatedAt;
     }
 
-    public String getAddress() {
-        return address;
+    public void setTitle(String title) {
+        this.title = title;
+        this.updatedAt = new Date();
     }
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
+        this.updatedAt = new Date();
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getInstagram() {
-        return instagram;
+        this.updatedAt = new Date();
     }
 
     public void setInstagram(String instagram) {
         this.instagram = instagram;
+        this.updatedAt = new Date();
     }
 
-    public String getMbti() {
-        return mbti;
+    public void addWorkExperience(WorkExperience experience) {
+        workExperience.add(experience);
+        this.updatedAt = new Date();
     }
 
-    public void setMbti(String mbti) {
-        this.mbti = mbti;
-    }
+    public String toDetailString() {
+        StringBuilder details = new StringBuilder();
+        details.append("이력서 ID: ").append(resumeId).append("\n");
+        details.append("제목: ").append(title).append("\n");
+        details.append("주소: ").append(address).append("\n");
+        details.append("전화번호: ").append(phoneNumber).append("\n");
+        details.append("인스타그램: ").append(instagram).append("\n");
+        details.append("수정 날짜: ").append(new SimpleDateFormat("yyyy-MM-dd").format(updatedAt)).append("\n\n");
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public List<WorkExperience> getWorkExperiences() {
-        return workExperiences;
-    }
-
-    public void addWorkExperience(WorkExperience workExperience) {
-        workExperiences.add(workExperience);
-        workExperience.setResume(this); // WorkExperience와의 관계 설정
-    }
-
-    // Display Resume Details
-    public void displayResumeDetails() {
-        System.out.println("Resume ID: " + resumeId);
-        System.out.println("Title: " + title);
-        System.out.println("Updated At: " + updatedAt);
-        System.out.println("Address: " + address);
-        System.out.println("Phone Number: " + phoneNumber);
-        System.out.println("Instagram: " + instagram);
-        System.out.println("MBTI: " + mbti);
-        System.out.println("Employee: " + (employee != null ? employee.getEmployeeName() : "No Employee"));
-        System.out.println("Work Experiences:");
-        for (WorkExperience workExperience : workExperiences) {
-            System.out.println("- Workplace: " + workExperience.getWorkplaceName());
+        if (!workExperience.isEmpty()) {
+            details.append("경력 사항:\n");
+            for (WorkExperience exp : workExperience) {
+                details.append("- 직장명: ").append(exp.getWorkplaceName()).append("\n");
+                details.append("  기간: ")
+                        .append(new SimpleDateFormat("yyyy-MM-dd").format(exp.getStartDate()))
+                        .append(" ~ ")
+                        .append(new SimpleDateFormat("yyyy-MM-dd").format(exp.getEndDate()))
+                        .append("\n업무 내용: ").append(exp.getWorkContent()).append("\n\n");
+            }
+        } else {
+            details.append("경력 없음\n");
         }
+
+        return details.toString();
     }
 }

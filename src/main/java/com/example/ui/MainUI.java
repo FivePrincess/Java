@@ -36,7 +36,7 @@ public class MainUI {
     }
 
     private void openResume() {
-//        new ResumeApp();
+        new ResumeApp();
     }
 
     private void openReview() {
