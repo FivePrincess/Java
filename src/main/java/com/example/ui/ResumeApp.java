@@ -16,7 +16,7 @@ public class ResumeApp extends JFrame {
     public ResumeApp() {
         setTitle("이력서 리스트");
         setSize(600, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         JButton addButton = new JButton("추가");

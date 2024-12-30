@@ -3,17 +3,12 @@ package main.java.com.example.model;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PaidCustomer {
     private int subscriptionId;
-    private int employerId;
-    private List<Payment> payments; // 여러 결제 정보를 저장
+    private Employer employer; // Employer 객체 참조
 
-    public PaidCustomer(int subscriptionId, int employerId) {
-        this.subscriptionId = subscriptionId;
-        this.employerId = employerId;
-        this.payments = new ArrayList<>(); // 초기화
-    }
-
+    // Getter and Setter for subscriptionId
     public int getSubscriptionId() {
         return subscriptionId;
     }
@@ -22,29 +17,20 @@ public class PaidCustomer {
         this.subscriptionId = subscriptionId;
     }
 
-    public int getEmployerId() {
-        return employerId;
+    // Getter and Setter for employer
+    public Employer getEmployer() {
+        return employer;
     }
 
-    public void setEmployerId(int employerId) {
-        this.employerId = employerId;
+    public void setEmployer(Employer employer) {
+        this.employer = employer;
     }
 
-    public List<Payment> getPayments() {
-        return payments;
-    }
-
-    // 결제 정보 추가
-    public void addPayment(Payment payment) {
-        payments.add(payment);
-    }
-
+    // Method to display customer information
     public void displayCustomerInfo() {
         System.out.println("Subscription ID: " + subscriptionId);
-        System.out.println("Employer ID: " + employerId);
-        System.out.println("Payments:");
-        for (Payment payment : payments) {
-            payment.displayPaymentDetails();
+        if (employer != null) {
+            System.out.println("Employer Name: " + employer.getEmployerName());
         }
     }
 }
