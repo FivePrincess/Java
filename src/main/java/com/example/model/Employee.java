@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Employee extends User {
     private String employeeName;
-    private String position;
-    private String contact;
-
-    // EmployeeReview와의 1:N 관계
-    private List<EmployeeReview> reviews = new ArrayList<>();
+    private int age;
+    private String profile;
+    private String mbti;
+    private String instagram;
+    private String[] hashtag;
 
     // Resume와의 1:N 관계
     private List<Resume> resumes = new ArrayList<>();
@@ -23,29 +23,44 @@ public class Employee extends User {
         this.employeeName = employeeName;
     }
 
-    public String getPosition() {
-        return position;
+    public int getAge() {
+        return age;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public String getContact() {
-        return contact;
+    public String getProfile() {
+        return profile;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
-    public List<EmployeeReview> getReviews() {
-        return reviews;
+    public String getMbti() {
+        return mbti;
     }
 
-    public void addReview(EmployeeReview review) {
-        reviews.add(review);
-        review.setEmployee(this); // Employee 객체 설정
+    public void setMbti(String mbti) {
+        this.mbti = mbti;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public String[] getHashtag() {
+        return hashtag;
+    }
+
+    public void setHashtag(String[] hashtag) {
+        this.hashtag = hashtag;
     }
 
     public List<Resume> getResumes() {
@@ -54,21 +69,20 @@ public class Employee extends User {
 
     public void addResume(Resume resume) {
         resumes.add(resume);
-        resume.setEmployee(this); // Resume 객체와의 관계 설정
+        resume.setEmployee(this); // Resume 객체와 관계 설정
     }
 
     @Override
     public void displayUserInfo() {
         System.out.println("Employee Name: " + employeeName);
-        System.out.println("Position: " + position);
-        System.out.println("Contact: " + contact);
+        System.out.println("Age: " + age);
+        System.out.println("Profile: " + profile);
+        System.out.println("MBTI: " + mbti);
+        System.out.println("Instagram: " + instagram);
+        System.out.println("Hashtags: " + String.join(", ", hashtag));
         System.out.println("Resumes:");
         for (Resume resume : resumes) {
             System.out.println("- Resume ID: " + resume.getResumeId() + ", Title: " + resume.getTitle());
-        }
-        System.out.println("Reviews:");
-        for (EmployeeReview review : reviews) {
-            System.out.println("- Review ID: " + review.getReviewId() + ", Rating: " + review.getRating());
         }
     }
 }
