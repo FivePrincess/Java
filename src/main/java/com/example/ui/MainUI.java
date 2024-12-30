@@ -44,7 +44,7 @@ public class MainUI {
     }
 
     private void openSubscribe() {
-        JOptionPane.showMessageDialog(frame, "구독 화면 열림 (구현 예정)");
+        new PaymentApp();
     }
 
     private void openGuesthouse() {
