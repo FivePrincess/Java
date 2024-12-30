@@ -1,6 +1,6 @@
 package main.java.com.example.model;
 
-public abstract class qu볃User {
+public abstract class User {
     private Long id;
     private String loginId;
     private String password;
