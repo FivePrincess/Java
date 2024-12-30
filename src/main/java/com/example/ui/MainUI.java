@@ -36,11 +36,11 @@ public class MainUI {
     }
 
     private void openResume() {
-        new ResumeApp();
+//        new ResumeApp();
     }
 
     private void openReview() {
-        new ReviewController(); // 새로운 프레임으로 리뷰 작성 화면 열기
+        new EmployeeReviewController(); // 새로운 프레임으로 리뷰 작성 화면 열기
     }
 
     private void openSubscribe() {
