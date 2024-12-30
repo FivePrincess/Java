@@ -1,12 +1,18 @@
 package main.java.com.example.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Employee extends User {
     private String employeeName;
-    private int age;
-    private String profile;
-    private String mbti;
-    private String instagram;
-    private String[] hashtag;
+    private String position;
+    private String contact;
+
+    // EmployeeReview와의 1:N 관계
+    private List<EmployeeReview> reviews = new ArrayList<>();
+
+    // Resume와의 1:N 관계
+    private List<Resume> resumes = new ArrayList<>();
 
     // Getters and Setters
     public String getEmployeeName() {
@@ -17,53 +23,52 @@ public class Employee extends User {
         this.employeeName = employeeName;
     }
 
-    public int getAge() {
-        return age;
+    public String getPosition() {
+        return position;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
-    public String getProfile() {
-        return profile;
+    public String getContact() {
+        return contact;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
-    public String getMbti() {
-        return mbti;
+    public List<EmployeeReview> getReviews() {
+        return reviews;
     }
 
-    public void setMbti(String mbti) {
-        this.mbti = mbti;
+    public void addReview(EmployeeReview review) {
+        reviews.add(review);
+        review.setEmployee(this); // Employee 객체 설정
     }
 
-    public String getInstagram() {
-        return instagram;
+    public List<Resume> getResumes() {
+        return resumes;
     }
 
-    public void setInstagram(String instagram) {
-        this.instagram = instagram;
-    }
-
-    public String[] getHashtag() {
-        return hashtag;
-    }
-
-    public void setHashtag(String[] hashtag) {
-        this.hashtag = hashtag;
+    public void addResume(Resume resume) {
+        resumes.add(resume);
+        resume.setEmployee(this); // Resume 객체와의 관계 설정
     }
 
     @Override
     public void displayUserInfo() {
         System.out.println("Employee Name: " + employeeName);
-        System.out.println("Age: " + age);
-        System.out.println("Profile: " + profile);
-        System.out.println("MBTI: " + mbti);
-        System.out.println("Instagram: " + instagram);
-        System.out.println("Hashtags: " + String.join(", ", hashtag));
+        System.out.println("Position: " + position);
+        System.out.println("Contact: " + contact);
+        System.out.println("Resumes:");
+        for (Resume resume : resumes) {
+            System.out.println("- Resume ID: " + resume.getResumeId() + ", Title: " + resume.getTitle());
+        }
+        System.out.println("Reviews:");
+        for (EmployeeReview review : reviews) {
+            System.out.println("- Review ID: " + review.getReviewId() + ", Rating: " + review.getRating());
+        }
     }
 }

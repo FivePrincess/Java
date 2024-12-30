@@ -1,4 +1,5 @@
-package main.java.com.example.model;// Resume.java
+
+package main.java.com.example.model;
 import main.java.com.example.model.WorkExperience;
 
 import java.util.ArrayList;

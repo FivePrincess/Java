@@ -1,25 +1,47 @@
 package main.java.com.example.model;
+import java.util.Date;
 
-public class Review {
-    private String guesthouseName;
-    private String visitDates;
-    private int rating;
+public abstract class Review {
+  
+    private int reviewId;
+    private float rating;
     private String content;
+    private Date date;
 
-    public Review(String guesthouseName, String visitDates, int rating, String content) {
-        this.guesthouseName = guesthouseName;
-        this.visitDates = visitDates;
+    // Getters and Setters
+    public int getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(int reviewId) {
+        this.reviewId = reviewId;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        return "<html>" +
-                "<strong>게스트하우스:</strong> " + guesthouseName + "<br>" +
-                "<strong>방문 기간:</strong> " + visitDates + "<br>" +
-                "<strong>평점:</strong> " + rating + " / 5<br>" +
-                "<strong>리뷰 내용:</strong> " + content +
-                "</html>";
+    public Date getDate() {
+        return date;
     }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    // Abstract method to be implemented by subclasses
+    public abstract void displayReviewDetails();
+
 }
