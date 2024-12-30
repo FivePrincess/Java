@@ -48,6 +48,6 @@ public class MainUI {
     }
 
     private void openGuesthouse() {
-        JOptionPane.showMessageDialog(frame, "게스트하우스 화면 열림 (구현 예정)");
+       new GuestHouseController();
     }
 }
